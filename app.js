@@ -19,11 +19,7 @@ const app = express();
 require("dotenv").config();
 
 
-//set view engine to ejs
-// app.set("view engine", "ejs");
-
-// app.use(express.json());
-const port = config.APP_PORT;
+ const port = config.APP_PORT;
 
 mongoose.connect(config.DB, {
   useNewUrlParser: true,
@@ -40,6 +36,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/todos', routes);
 
+
+
+
+
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
   next(createError(404));
@@ -55,6 +55,10 @@ app.use((err, req, res) => {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+
+
 
 //app.listen(config.APP_PORT); // Listen on port defined in environment
 app.listen(port, () => {

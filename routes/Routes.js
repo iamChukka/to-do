@@ -10,29 +10,35 @@ app.set("view engine", "ejs");
 
 app.use(express.json());
 
-
 // get all todo items in the db
-app.get('/', (req, res) => {
-  const mascots = [];
+app.get('/',  (req, res) => {
   repository.findAll().then((todos) => {
-    console.log(res.json(todos));
     
-    mascots = res.json(todos);
-//   const tagline = "Click to add to your TO-DO list";
-
+    //res.json(todos);
+    
+    res.render("pages/index",{
+      mascots: todos,
+      //tagline: tagline,
+    });
+  console.log(todos);
 
   }).catch((error) => console.log(error));
-  res.render("pages/index",{
-    mascots: mascots,
-     //tagline: tagline,
-   });
+  
 });
+
 
 // add a todo item
 app.post('/', (req, res) => {
   const { name } = req.body;
+  console.log(name);
   repository.create(name).then((todo) => {
-    res.json(todo);
+    //res.json(todo);
+
+    if (!name) 
+    return  res.send ("Please enter To-do item");
+    res.redirect('/todos');
+
+
   }).catch((error) => console.log(error));
 });
 

@@ -9,18 +9,7 @@
     <main>
       <div class="jumbotron">
         <h1>Chukwuka's To Do List</h1>
-        <form method="POST" action="/api/to-do" class="form-inline">
-          <input
-            id="to-do-input"
-            class="form-control mr-sm-2"
-            type="search"
-            placeholder="Add To-Do"
-            aria-label="Search"
-          />
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-            Add
-          </button>
-        </form>
+        <%- include('../partials/form'); %>
         <table class="table">
           <thead>
             <tr>
@@ -32,11 +21,11 @@
             </tr>
           </thead>
           <tbody>
-            <% mascots.forEach(function(mascot) { %>
+            <%let i= 1;%> <% mascots.forEach(function(mascot) { %>
             <tr>
-              <td scope="row"><%= mascot.id %></td>
+              <td scope="row"><%= i++ %></td>
               <td><%= mascot.name %></td>
-              <td><%= mascot.description %></td>
+              <td><%= mascot.done %></td>
             </tr>
             <% }); %>
           </tbody>
