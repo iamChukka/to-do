@@ -30,7 +30,7 @@ app.get('/',  (req, res) => {
 // add a todo item
 app.post('/', (req, res) => {
   const { name } = req.body;
-  console.log(name);
+  //console.log(name);
   repository.create(name).then((todo) => {
     //res.json(todo);
 
@@ -48,7 +48,8 @@ app.delete('/:id', (req, res) => {
   repository.deleteById(id).then((ok) => {
     console.log(ok);
     console.log(`Deleted record with id: ${id}`);
-    res.status(200).json([]);
+    //res.status(200).json([]);
+    res.status(200).redirect('/todos');
   }).catch((error) => console.log(error));
 });
 

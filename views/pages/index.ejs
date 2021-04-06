@@ -26,6 +26,21 @@
               <td scope="row"><%= i++ %></td>
               <td><%= mascot.name %></td>
               <td><%= mascot.done %></td>
+              <td>
+                <button
+                  class="btn btn-outline-success my-2 my-sm-0"
+                  type="submit"
+                >
+                  Edit
+                </button>
+              </td>
+              <td>
+                <form action="/todos/<%= mascot.id%>">
+                  <button class="btn-danger my-2 my-sm-0" type="submit">
+                    Delete
+                  </button>
+                </form>
+              </td>
             </tr>
             <% }); %>
           </tbody>
