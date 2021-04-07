@@ -36,6 +36,7 @@ app.post('/', (req, res) => {
 
     if (!name) 
     return  res.send ("Please enter To-do item");
+    
     res.redirect('/todos');
 
 
@@ -48,8 +49,11 @@ app.delete('/:id', (req, res) => {
   repository.deleteById(id).then((ok) => {
     console.log(ok);
     console.log(`Deleted record with id: ${id}`);
-    //res.status(200).json([]);
-    res.status(200).redirect('/todos');
+    
+    res.status(200).json({
+      redirect: '/todos'
+    });
+    
   }).catch((error) => console.log(error));
 });
 
