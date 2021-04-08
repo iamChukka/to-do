@@ -62,7 +62,9 @@ app.put('/:id', (req, res) => {
   const { id } = req.params;
   const todo = { name: req.body.name, done: req.body.done };
   repository.updateById(id, todo)
-    .then(res.status(200).json([]))
+    .then(res.status(200).json({
+      redirect: '/todos'
+    }))
     .catch((error) => console.log(error));
 });
 module.exports = app;
