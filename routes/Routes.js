@@ -1,6 +1,6 @@
 const express = require('express');
-
-
+const bcrypt = require('bcrypt');
+const users =[];
 //const app = express.Router();
 const app = express();
 const repository = require('../repositories/TodoRepository');
@@ -9,6 +9,7 @@ const repository = require('../repositories/TodoRepository');
 app.set("view engine", "ejs");
 
 app.use(express.json());
+app.use(express.urlencoded({extended: false}))
 
 // get all todo items in the db
 app.get('/',  (req, res) => {
@@ -24,6 +25,47 @@ app.get('/',  (req, res) => {
 
   }).catch((error) => console.log(error));
   
+});
+
+// get login page
+app.get('/login',  (req, res) => {
+        
+    res.render("pages/login",{
+
+    });
+
+  
+});
+
+// get register page
+app.get('/register',  (req, res) => {
+        
+    res.render("pages/register",{
+
+    });
+});
+
+app.post('/register',async (req,res)=>{
+  try{const hashedPassword =  await bcrypt.hash(req.body.password,10)
+    users.push({
+      id: Date.now().toString(),
+      name: req.body.name,
+      email: req.body.email,
+      password: hashedPassword
+    })
+    res.redirect('login')
+  }catch{
+    res.redirect('/register')
+  }
+  console.log(users);
+});
+
+// get login page
+app.get('/register',  (req, res) => {
+        
+  res.render("pages/login",{
+
+  });
 });
 
 
@@ -51,7 +93,7 @@ app.delete('/:id', (req, res) => {
     console.log(`Deleted record with id: ${id}`);
     
     res.status(200).json({
-      redirect: '/todos'
+      //redirect: '/todos'
     });
     
   }).catch((error) => console.log(error));
@@ -63,7 +105,7 @@ app.put('/:id', (req, res) => {
   const todo = { name: req.body.name, done: req.body.done };
   repository.updateById(id, todo)
     .then(res.status(200).json({
-      redirect: '/todos'
+      //redirect: '/todos'
     }))
     .catch((error) => console.log(error));
 });

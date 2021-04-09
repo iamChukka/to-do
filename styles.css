@@ -1,13 +1,17 @@
 #todotable {
-    margin:auto;
-    width: 75%;
+  margin: auto;
+  width: 75%;
 }
 
-body { 
-    padding-top:50px; 
+body {
+  padding-top: 50px;
+  height: 100%;
 }
 
-table,tr,th,td {
-    text-align: center;
-    border: 3px solid green;
+table,
+tr,
+th,
+td {
+  text-align: center;
+  border: 3px solid green;
 }
