@@ -4,9 +4,10 @@
     <%- include('../partials/head'); %>
   </head>
   <body class="container h-75 mt-5">
+    <% if (messages.error){%> <%=messages.error%> <% }%>
     <main>
       <div class="container-lg align-items-center">
-        <form action="/login" method="POST">
+        <form action="login" method="POST">
           <div class="mb-3 row">
             <label for="staticEmail" class="col-sm-2 col-form-label">
               Email
