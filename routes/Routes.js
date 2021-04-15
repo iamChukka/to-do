@@ -157,7 +157,11 @@ app.put('/:id', (req, res) => {
     .catch((error) => console.log(error));
 });
 
-
+app.delete('/logout',(req,res)=>{
+  req.logOut()
+  req.session.destroy(err=>{})
+  res.redirect('/login')
+});
 
 function checkAuthenticated(req,res,next){
   if(req.isAuthenticated()){
