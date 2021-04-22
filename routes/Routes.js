@@ -28,7 +28,7 @@ const app = express();
 const repository = require('../repositories/TodoRepository');
 const userRepository = require('../repositories/UserRepository');
 //const passport = require('passport');
-//const e = require('express');
+
 //set view engine to ejs
 app.set("view engine", "ejs");
 
@@ -44,6 +44,14 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method'));
+
+// app.use(function(req,res,next){
+//   if (req.query._method === 'DELETE'){
+//     req.method = 'DELETE';
+//     req.url = req.path;
+//   }
+//   next();
+// });
 
 // get all todo items in the db
 app.get('/', checkAuthenticated, (req, res) => {
@@ -96,15 +104,15 @@ app.post('/register',async (req,res)=>{
       email: req.body.email,
       password: hashedPassword
     })
-    userRepository.create(
-      JSON.stringify({
-        name: req.body.name,
-        email: req.body.email,
-        password: hashedPassword
-      })
-    ).then((user)=>{
-      console.log(user);
-    });
+    // userRepository.create(
+    //   JSON.stringify({
+    //     name: req.body.name,
+    //     email: req.body.email,
+    //     password: hashedPassword
+    //   })
+    // ).then((user)=>{
+    //   console.log(user);
+    // });
     console.log(req.body.name)
     res.redirect('login')
   }catch{
@@ -157,10 +165,11 @@ app.put('/:id', (req, res) => {
     .catch((error) => console.log(error));
 });
 
-app.delete('/logout',(req,res)=>{
-  req.logOut()
-  req.session.destroy(err=>{})
-  res.redirect('/login')
+app.get('/logout',(req,res)=>{
+  req.logOut();
+  //console.log("I'm here");
+  //req.session.destroy(err=>{})
+  res.redirect('login');
 });
 
 function checkAuthenticated(req,res,next){
