@@ -53,6 +53,11 @@ app.use(methodOverride('_method'));
 //   next();
 // });
 
+app.get('/',checkAuthenticated,(req,res)=>{
+  
+});
+
+
 // get all todo items in the db
 app.get('/', checkAuthenticated, (req, res) => {
   repository.findAll().then((todos) => {
