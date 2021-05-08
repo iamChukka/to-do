@@ -19,16 +19,15 @@ const flash = require('express-flash');
 const session = require('express-session');
 const methodOverride = require('method-override');
 const userRepository = require('./repositories/UserRepository');
-//const passport = require('passport');
-
-const users =[];
-
-
+const authenticated = require('./authenticate');
 const config = require('./config/Config');
-
 const routes = require('./routes/Routes');
 
+const users =[];
 const app = express();
+
+const checkAuthenticated = authenticated.checkAuthenticated;
+const checkNotAuthenticated = authenticated.checkNotAuthenticated;
 
 //require("dotenv").config();
 
@@ -50,12 +49,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/todos' ,routes);
-
-
-
-app.use(express.json());
-app.use(express.urlencoded({extended: false}));
 app.use(flash());
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -67,6 +60,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method'));
 
+app.use('/todos',routes);
 
 
 
@@ -79,9 +73,9 @@ initialisePassport(
   id =>{
     return users.find(user=>user.id ===id)
   }
-)
+);
 
-app.get('/',checkAuthenticated,(req,res)=>{
+app.get('/',(req,res)=>{
   res.redirect('/login');
 });
 
@@ -95,16 +89,13 @@ app.get('/login', checkNotAuthenticated, (req, res) => {
 
 });
 
-
-
-
-
-// get login page
-app.post('/login',  passport.authenticate('local',{
-successRedirect: '/todos',
-failureRedirect:'login',
-failureFlash: true
-}));
+// login to TODOS page
+app.post('/login', passport.authenticate('local',{
+    successRedirect: '/todos',
+    failureRedirect:'/login',
+    failureFlash: true
+  })
+);
 
 // get register page
 app.get('/register', checkNotAuthenticated ,(req, res) => {
@@ -147,21 +138,7 @@ app.get('/logout',(req,res)=>{
 });
 
 
-function checkAuthenticated(req,res,next){
-  if(req.isAuthenticated()){
-    return next();
-  }
 
-  res.redirect('/login');
-}
-
-function checkNotAuthenticated(req,res,next){
-  if(req.isAuthenticated()){
-    return res.redirect('/todos');
-  }
-
-  next();
-}
 
 
 // catch 404 and forward to error handler

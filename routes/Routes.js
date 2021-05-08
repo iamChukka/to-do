@@ -1,5 +1,3 @@
-
-
 const express = require('express');
 
 
@@ -11,13 +9,18 @@ app.set("view engine", "ejs");
 
 const repository = require('../repositories/TodoRepository');
 
+const authenticated = require('../authenticate');
+
+
+const checkAuthenticated = authenticated.checkAuthenticated;
+const checkNotAuthenticated = authenticated.checkNotAuthenticated;
 
 
 
 
 
 // get all todo items in the db
-app.get('/', /*checkAuthenticated,*/ (req, res) => {
+app.get('/', checkAuthenticated ,(req, res) => {
   repository.findAll().then((todos) => {
     
     //res.json(todos);
@@ -31,10 +34,6 @@ app.get('/', /*checkAuthenticated,*/ (req, res) => {
   }).catch((error) => console.log(error));
   
 });
-
-
-
-
 
 // add a todo item
 app.post('/', (req, res) => {
