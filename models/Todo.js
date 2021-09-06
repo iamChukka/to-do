@@ -12,6 +12,14 @@ const todoSchema = new Schema({
   done: {
     type: Boolean,
   },
+  // user: {
+  //   type: new mongoose.Schema({
+  //     name: {
+  //       type: String,
+  //       required: true,
+  //     },
+  //   }),
+  // },
 });
 
 const Todo = mongoose.model('Todo', todoSchema);
