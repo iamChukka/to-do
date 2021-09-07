@@ -29,7 +29,7 @@ app.get('/', checkAuthenticated, (req, res) => {
         // console.log('req', req.user.id);
         // console.log('todo ', todos[i].user.id);
       }
-      console.log(userTodo);
+      //console.log(userTodo);
       res.render('pages/index', {
         mascots: userTodo,
         //name: req.user.name
