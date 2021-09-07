@@ -3,14 +3,17 @@
 const User = require('../models/User');
 
 class UserRepository {
-
   constructor(model) {
     this.model = model;
   }
 
   // create a new user
-  create(name,email,password) {
-    const newUser = { name, email,password };
+  create(object) {
+    const newUser = {
+      name: object.name,
+      email: object.email,
+      password: object.password,
+    };
     const user = new this.model(newUser);
 
     return user.save();
@@ -27,7 +30,7 @@ class UserRepository {
     return this.model.findById(id);
   }
 
-    // delete user
+  // delete user
   deleteById(id) {
     return this.model.findByIdAndDelete(id);
   }
@@ -35,7 +38,13 @@ class UserRepository {
   //update user
   updateById(id, object) {
     const query = { _id: id };
-    return this.model.findOneAndUpdate(query, { $set: { name: object.name, email: object.email, password: object.password } });
+    return this.model.findOneAndUpdate(query, {
+      $set: {
+        name: object.name,
+        email: object.email,
+        password: object.password,
+      },
+    });
   }
 }
 

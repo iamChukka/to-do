@@ -3,14 +3,17 @@
 const Todo = require('../models/Todo');
 
 class TodoRepository {
-
   constructor(model) {
     this.model = model;
   }
 
   // create a new todo
-  create(name) {
-    const newTodo = { name, done: false };
+  create(name, user) {
+    const newTodo = {
+      name,
+      done: false,
+      user,
+    };
     const todo = new this.model(newTodo);
 
     return todo.save();
@@ -27,7 +30,7 @@ class TodoRepository {
     return this.model.findById(id);
   }
 
-    // delete todo
+  // delete todo
   deleteById(id) {
     return this.model.findByIdAndDelete(id);
   }
@@ -35,7 +38,9 @@ class TodoRepository {
   //update todo
   updateById(id, object) {
     const query = { _id: id };
-    return this.model.findOneAndUpdate(query, { $set: { name: object.name, done: object.done } });
+    return this.model.findOneAndUpdate(query, {
+      $set: { name: object.name, done: object.done },
+    });
   }
 }
 
