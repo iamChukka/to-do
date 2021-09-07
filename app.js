@@ -49,6 +49,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+getUsers();
 app.use(flash());
 app.use(
   session({
@@ -61,7 +62,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method'));
-getUsers();
+
 app.use('/todos', routes);
 
 //console.log(users);
@@ -149,6 +150,7 @@ app.use((err, req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}!`);
 });
+
 function getUsers() {
   userRepository.findAll().then((users) => {
     //return users;

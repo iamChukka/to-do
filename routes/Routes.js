@@ -17,8 +17,6 @@ const checkNotAuthenticated = authenticated.checkNotAuthenticated;
 // get all todo items in the db
 app.get('/', checkAuthenticated, (req, res) => {
   try {
-    const { _id, name } = req.user;
-    //console.log(_id, name);
     repository.findAll().then((todos) => {
       //res.json(todos);
       let userTodo = [];
@@ -30,7 +28,7 @@ app.get('/', checkAuthenticated, (req, res) => {
         // console.log('todo ', todos[i].user.id);
       }
       //console.log(userTodo);
-      res.render('pages/index', {
+      return res.render('pages/index', {
         mascots: userTodo,
         //name: req.user.name
         //tagline: tagline,
