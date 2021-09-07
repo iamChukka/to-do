@@ -8,10 +8,11 @@ class TodoRepository {
   }
 
   // create a new todo
-  create(name) {
+  create(name, user) {
     const newTodo = {
       name,
       done: false,
+      user,
     };
     const todo = new this.model(newTodo);
 

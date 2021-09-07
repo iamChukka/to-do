@@ -11,6 +11,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+const initialisePassport = require('./config/passport-config');
 
 const bcrypt = require('bcrypt');
 const passport = require('passport');
@@ -22,7 +23,7 @@ const authenticated = require('./authenticate');
 const config = require('./config/Config');
 const routes = require('./routes/Routes');
 
-const users = [];
+let users = [];
 const app = express();
 
 const checkAuthenticated = authenticated.checkAuthenticated;
@@ -60,19 +61,10 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method'));
-
+getUsers();
 app.use('/todos', routes);
 
-const initialisePassport = require('./config/passport-config');
-initialisePassport(
-  passport,
-  (email) => {
-    return users.find((user) => user.email === email);
-  },
-  (id) => {
-    return users.find((user) => user.id === id);
-  }
-);
+//console.log(users);
 
 app.get('/', (req, res) => {
   res.redirect('/login');
@@ -101,27 +93,33 @@ app.get('/register', checkNotAuthenticated, (req, res) => {
 app.post('/register', async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    users.push({
-      id: Date.now().toString(),
-      name: req.body.name,
-      email: req.body.email,
-      password: hashedPassword,
-    });
-    // userRepository.create(
-    //   JSON.stringify({
-    //     name: req.body.name,
-    //     email: req.body.email,
-    //     password: hashedPassword
-    //   })
-    // ).then((user)=>{
-    //   console.log(user);
+    // users.push({
+    //   //id: Date.now().toString(),
+    //   name: req.body.name,
+    //   email: req.body.email,
+    //   password: hashedPassword,
     // });
-    console.log(req.body.name);
-    res.redirect('/login');
+    userRepository
+      .create({
+        name: req.body.name,
+        email: req.body.email,
+        password: hashedPassword,
+      })
+      .then((newUser) => {
+        // res.json(newUser);
+        console.log(newUser);
+        res.redirect('/login');
+      })
+      .catch((errors) => {
+        // res.status(500).json({ errors });
+      });
+
+    //console.log(req.body);
   } catch {
     res.redirect('/register');
   }
-  console.log(users);
+
+  //console.log(users);
 });
 
 app.get('/logout', (req, res) => {
@@ -151,5 +149,20 @@ app.use((err, req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}!`);
 });
+function getUsers() {
+  userRepository.findAll().then((users) => {
+    //return users;
+    //console.log(users);
+    initialisePassport(
+      passport,
+      (email) => {
+        return users.find((user) => user.email === email);
+      },
+      (id) => {
+        return users.find((user) => user.id === id);
+      }
+    );
+  });
+}
 
 module.exports = app;
