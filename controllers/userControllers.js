@@ -1,7 +1,6 @@
-//repositories/UserRepository
 const _ = require('lodash');
 const { User, validateUser } = require('../models/User');
-// const  = require('../models/User');
+const bcrypt = require('bcrypt');
 
 const createError = (msg, obj) => {
   const message = new Error(msg);
@@ -33,9 +32,14 @@ class UserController {
         _.pick(req.body, ['name', 'email', 'password'])
       );
 
+      const salt = await bcrypt.genSalt(10);
+      newUser.password = await bcrypt.hash(newUser.password, salt);
+      await newUser.save();
+
+      //console.log(salt);
+      //console.log(newUser.password);
       //user = new this.model(newUser);
 
-      //await newUser.save();
       return res.status(201).json({
         message: 'User created Successfully',
         data: _.pick(newUser, ['_id', 'name', 'email']),

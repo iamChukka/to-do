@@ -23,6 +23,7 @@ const authenticated = require('./authenticate');
 const config = require('./config/Config');
 const todos = require('./routes/Todos');
 const users = require('./routes/Users');
+const auth = require('./routes/Auth');
 
 const app = express();
 
@@ -62,7 +63,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method'));
-
+app.use('/api/auth', auth);
 app.use('/api/users', users);
 app.use('/api/todos', todos);
 
