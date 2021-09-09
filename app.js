@@ -18,12 +18,13 @@ const passport = require('passport');
 const flash = require('express-flash');
 const session = require('express-session');
 const methodOverride = require('method-override');
-const userRepository = require('./repositories/UserRepository');
+const userRepository = require('./controllers/userControllers');
 const authenticated = require('./authenticate');
 const config = require('./config/Config');
-const routes = require('./routes/Routes');
+const todos = require('./routes/Todos');
+const users = require('./routes/Users');
+const auth = require('./routes/Auth');
 
-let users = [];
 const app = express();
 
 const checkAuthenticated = authenticated.checkAuthenticated;
@@ -49,6 +50,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//getUsers();
 app.use(flash());
 app.use(
   session({
@@ -61,8 +63,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method'));
-getUsers();
-app.use('/todos', routes);
+app.use('/api/auth', auth);
+app.use('/api/users', users);
+app.use('/api/todos', todos);
 
 //console.log(users);
 
@@ -106,9 +109,8 @@ app.post('/register', async (req, res) => {
         password: hashedPassword,
       })
       .then((newUser) => {
-        // res.json(newUser);
+        res.json(newUser);
         console.log(newUser);
-        res.redirect('/login');
       })
       .catch((errors) => {
         // res.status(500).json({ errors });
@@ -149,6 +151,7 @@ app.use((err, req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}!`);
 });
+
 function getUsers() {
   userRepository.findAll().then((users) => {
     //return users;
