@@ -1,5 +1,5 @@
 //repositories/UserRepository
-
+const _ = require('lodash');
 const { User, validateUser } = require('../models/User');
 // const  = require('../models/User');
 
@@ -7,8 +7,8 @@ const createError = (msg, obj) => {
   const message = new Error(msg);
   //console.log(message);
   let err = {
-    message,
-    //...obj,
+    message: message,
+    detail: obj,
   };
   console.log(err);
   return err;
@@ -23,26 +23,26 @@ class UserController {
   static async createUser(req, res) {
     try {
       const { error } = validateUser(req.body);
-      if (error) throw createError('Validation failed', error);
+      if (error)
+        throw createError('Validation failed', error.details[0].message);
 
       let user = await User.findOne({ email: req.body.email });
       if (user) throw createError('User Already registered');
 
-      const newUser = await User.create({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-      });
+      const newUser = await User.create(
+        _.pick(req.body, ['name', 'email', 'password'])
+      );
 
       //user = new this.model(newUser);
 
       //await newUser.save();
-      return res
-        .status(201)
-        .json({ message: 'User created Successfully', data: newUser });
-    } catch (e) {
+      return res.status(201).json({
+        message: 'User created Successfully',
+        data: _.pick(newUser, ['_id', 'name', 'email']),
+      });
+    } catch (error) {
       //console.log(e);
-      return res.status(400).json(e);
+      return res.status(400).json(error);
     }
   }
 
