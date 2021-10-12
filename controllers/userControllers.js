@@ -1,3 +1,5 @@
+//const config = require('../config/Config');
+
 const _ = require('lodash');
 const { User, validateUser } = require('../models/User');
 const bcrypt = require('bcrypt');
@@ -14,38 +16,40 @@ const createError = (msg, obj) => {
 };
 
 class UserController {
-  // constructor(model) {
-  //   this.model = model;
-  // }
-
   // create a new user
   static async createUser(req, res) {
     try {
       const { error } = validateUser(req.body);
       if (error)
-        throw createError('Validation failed', error.details[0].message);
+        return res
+          .status(400)
+          .json({ message: 'Validation failed ' + error.details[0].message });
+      //throw createError('Validation failed', error.details[0].message);
 
       let user = await User.findOne({ email: req.body.email });
-      if (user) throw createError('User Already registered');
+      if (user)
+        return res.status(400).json({ message: 'User Already registered' });
+      // throw createError('User Already registered');
 
-      const newUser = await User.create(
-        _.pick(req.body, ['name', 'email', 'password'])
-      );
+      user = await User.create(_.pick(req.body, ['name', 'email', 'password']));
 
       const salt = await bcrypt.genSalt(10);
-      newUser.password = await bcrypt.hash(newUser.password, salt);
-      await newUser.save();
+      user.password = await bcrypt.hash(user.password, salt);
 
-      //console.log(salt);
-      //console.log(newUser.password);
-      //user = new this.model(newUser);
+      await user.save();
+      console.log(user);
 
-      return res.status(201).json({
-        message: 'User created Successfully',
-        data: _.pick(newUser, ['_id', 'name', 'email']),
-      });
+      const token = user.generateAuthToken();
+
+      return res
+        .status(201)
+        .header({ 'x-auth-token': token })
+        .json({
+          message: 'User created Successfully',
+          data: _.pick(user, ['_id', 'name', 'email']),
+        });
     } catch (error) {
-      //console.log(e);
+      console.log(error);
       return res.status(400).json(error);
     }
   }

@@ -1,4 +1,6 @@
 //models/User.js
+const config = require('../config/Config');
+const jwt = require('jsonwebtoken');
 const label = 'Password';
 const Joi = require('joi');
 const passwordComplexity = require('joi-password-complexity');
@@ -50,6 +52,14 @@ function validateUser(user) {
   return Schema.validate(user);
 }
 
+userSchema.methods.generateAuthToken = function () {
+  const token = jwt.sign(
+    { _id: this._id, email: this.email, name: this.name },
+    config.TODO_JWTPRIVATEKEY
+  );
+  console.log(token, 'We are here');
+  return token;
+};
 const User = mongoose.model('User', userSchema);
 
 module.exports = { User, validateUser };

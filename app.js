@@ -3,7 +3,6 @@
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config;
 }
-
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -37,6 +36,10 @@ app.set('view engine', 'ejs');
 
 const port = config.APP_PORT;
 
+if (!config.TODO_JWTPRIVATEKEY) {
+  console.error('FATAL ERROR: jwtPrivateKey is not defined');
+  process.exit(1);
+}
 mongoose.connect(config.DB, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

@@ -23,7 +23,7 @@ class AuthController {
       if (error)
         return res
           .status(400)
-          .send('Validation failed ' + error.details[0].message);
+          .json('Validation failed ' + error.details[0].message);
       // throw createError('Validation failed', error.details[0].message);
 
       let user = await User.findOne({ email: req.body.email });
@@ -36,9 +36,12 @@ class AuthController {
       );
 
       if (!validPassword)
-        return res.status(400).send('Invalid Email or password');
+        return res.status(400).json('Invalid Email or password');
       //throw createError('Invalid Email or password');
-      return res.send(true);
+
+      const token = user.generateAuthToken();
+
+      return res.send(token);
     } catch (error) {
       return res.status(400).json(error);
     }
