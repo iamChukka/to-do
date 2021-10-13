@@ -1,5 +1,4 @@
 //const config = require('../config/Config');
-
 const _ = require('lodash');
 const { User, validateUser } = require('../models/User');
 const bcrypt = require('bcrypt');
@@ -53,34 +52,10 @@ class UserController {
       return res.status(400).json(error);
     }
   }
-
-  // return all users
-
-  // findAll() {
-  //   return this.model.find();
-  // }
-
-  // //find users by the id
-  // findById(id) {
-  //   return this.model.findById(id);
-  // }
-
-  // // delete user
-  // deleteById(id) {
-  //   return this.model.findByIdAndDelete(id);
-  // }
-
-  // //update user
-  // updateById(id, object) {
-  //   const query = { _id: id };
-  //   return this.model.findOneAndUpdate(query, {
-  //     $set: {
-  //       name: object.name,
-  //       email: object.email,
-  //       password: object.password,
-  //     },
-  //   });
-  // }
+  static async getUser(req, res) {
+    const user = await User.findById(req.user._id).select('-password');
+    res.send(user);
+  }
 }
 
 module.exports = UserController;

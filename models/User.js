@@ -53,10 +53,7 @@ function validateUser(user) {
 }
 
 userSchema.methods.generateAuthToken = function () {
-  const token = jwt.sign(
-    { _id: this._id, email: this.email, name: this.name },
-    config.TODO_JWTPRIVATEKEY
-  );
+  const token = jwt.sign({ _id: this._id }, config.TODO_JWTPRIVATEKEY);
   console.log(token, 'We are here');
   return token;
 };

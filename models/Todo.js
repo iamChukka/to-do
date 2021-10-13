@@ -12,13 +12,8 @@ const todoSchema = new Schema({
   done: {
     type: Boolean,
   },
-  user: {
-    type: new mongoose.Schema({
-      name: {
-        type: String,
-        required: true,
-      },
-    }),
+  userId: {
+    type: Schema.ObjectId,
   },
 });
 
