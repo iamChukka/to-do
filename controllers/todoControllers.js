@@ -10,7 +10,10 @@ class TodoController {
 
       todo.save();
       return res.status(201).json({ todo });
-    } catch (ex) {}
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error);
+    }
   }
 
   static async getTodosByUserId(req, res) {
@@ -20,7 +23,10 @@ class TodoController {
       const todo = await Todo.find({ userId: req.user._id });
 
       return res.status(200).json({ todo });
-    } catch (ex) {}
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error);
+    }
   }
 
   static async deleteTodo(req, res) {
@@ -38,7 +44,10 @@ class TodoController {
       return res
         .status(200)
         .json({ message: 'Successfully Deleted Todo', data: todo });
-    } catch (ex) {}
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error);
+    }
   }
   static async updateTodo(req, res) {
     try {
@@ -59,50 +68,11 @@ class TodoController {
       return res
         .status(200)
         .json({ message: 'Successfully Edited Todo', data: todo });
-    } catch (ex) {}
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error);
+    }
   }
 }
 
-// class TodoRepository {
-//   constructor(model) {
-//     this.model = model;
-//   }
-
-//   // create a new todo
-//   create(name) {
-//     const newTodo = {
-//       name,
-//       done: false,
-//     };
-//     const todo = new this.model(newTodo);
-
-//     return todo.save();
-//   }
-
-//   // return all todos
-
-//   findAll() {
-//     return this.model.find();
-//   }
-
-//   //find todo by the id
-//   findById(id) {
-//     return this.model.findById(id);
-//   }
-
-//   // delete todo
-//   deleteById(id) {
-//     return this.model.findByIdAndDelete(id);
-//   }
-
-//   //update todo
-//   updateById(id, object) {
-//     const query = { _id: id };
-//     return this.model.findOneAndUpdate(query, {
-//       $set: { name: object.name, done: object.done },
-//     });
-//   }
-// }
-
-// module.exports = new TodoRepository(Todo);
 module.exports = TodoController;
