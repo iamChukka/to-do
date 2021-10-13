@@ -14,35 +14,17 @@ const authenticated = require('../middleware/authenticate');
 const checkAuthenticated = authenticated.checkAuthenticated;
 const checkNotAuthenticated = authenticated.checkNotAuthenticated;
 
-// get all todo items in the db
-// router.get('/', /*checkAuthenticated,*/ auth, (req, res) => {
-//   try {
-//     todoRepository.find({ userId: req.user._id }).then((todos) => {
-//       console.log(todos);
-//       return res.send(todos);
-//     });
-
-//     // todoRepository.findAll().then((todos) => {
-//     //   let userTodo = [];
-//     //   for (let i = 0; i < todos.length; i++) {
-//     //     if (req.user.id == todos[i].user.id) {
-//     //       userTodo.push(todos[i]);
-//     //     }
-
-//     //   }
-
-//     //   return res.json(userTodo);
-//     // });
-//   } catch (e) {
-//     console.log('Errors everyday');
-//   }
-// });
-
 // add a todo item
 router.post('/', auth, todoControllers.createTodo);
 
 //get all items User added
 router.get('/', auth, todoControllers.getTodosByUserId);
+
+// delete a todo item
+router.delete('/:id', auth, todoControllers.deleteTodo);
+
+// update a todo item
+router.put('/:id', auth, todoControllers.updateTodo);
 
 // // delete a todo item
 // router.delete('/:id', (req, res) => {

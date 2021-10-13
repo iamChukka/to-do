@@ -19,7 +19,46 @@ class TodoController {
       //const { name } = req.body;
       const todo = await Todo.find({ userId: req.user._id });
 
-      return res.status(201).json({ todo });
+      return res.status(200).json({ todo });
+    } catch (ex) {}
+  }
+
+  static async deleteTodo(req, res) {
+    try {
+      const id = req.params.id;
+      const todo = await Todo.findById(id);
+
+      if (todo.userId.toString() !== req.user._id)
+        return res
+          .status(403)
+          .json({ message: 'You are not authorised to change' });
+
+      await Todo.findByIdAndDelete(id);
+
+      return res
+        .status(200)
+        .json({ message: 'Successfully Deleted Todo', data: todo });
+    } catch (ex) {}
+  }
+  static async updateTodo(req, res) {
+    try {
+      const id = req.params.id;
+
+      let todo = await Todo.findById(id);
+
+      if (todo.userId.toString() !== req.user._id)
+        return res
+          .status(403)
+          .json({ message: 'You are not authorised to change' });
+
+      const newTodo = req.body;
+      await Todo.findByIdAndUpdate(id, {
+        $set: { name: newTodo.name },
+      });
+      todo = await Todo.findById(id);
+      return res
+        .status(200)
+        .json({ message: 'Successfully Edited Todo', data: todo });
     } catch (ex) {}
   }
 }
