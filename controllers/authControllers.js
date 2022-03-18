@@ -1,17 +1,14 @@
-const { User } = require('../models/User');
-const bcrypt = require('bcrypt');
-const label = 'Password';
-const Joi = require('joi');
-const passwordComplexity = require('joi-password-complexity');
+const { User } = require("../models/User");
+const bcrypt = require("bcrypt");
+const label = "Password";
+const Joi = require("joi");
+const passwordComplexity = require("joi-password-complexity");
 
-const createError = (msg, obj) => {
-  const message = new Error(msg);
+const createError = (msg, code = 403) => {
+  const err = new Error(msg);
   //console.log(message);
-  let err = {
-    message: message,
-    detail: obj,
-  };
-  console.log(err);
+  err.code = code;
+  //console.log(err);
   return err;
 };
 
@@ -21,14 +18,15 @@ class AuthController {
     try {
       const { error } = validate(req.body);
       if (error)
-        return res
-          .status(400)
-          .json('Validation failed ' + error.details[0].message);
-      // throw createError('Validation failed', error.details[0].message);
+        // return res
+        //   .status(400)
+        //   .json('Validation failed ' + error.details[0].message);
+        throw createError("Validation failed", 403);
 
       let user = await User.findOne({ email: req.body.email });
-      if (!user) return res.status(400).send('Invalid Email or password');
-      //throw createError('Invalid Email or password');
+      if (!user)
+        //return res.status(400).send('Invalid Email or password');
+        throw createError("Invalid Email or password", 400);
 
       const validPassword = await bcrypt.compare(
         req.body.password,
@@ -36,14 +34,14 @@ class AuthController {
       );
 
       if (!validPassword)
-        return res.status(400).json('Invalid Email or password');
-      //throw createError('Invalid Email or password');
+        //return res.status(400).json('Invalid Email or password');
+        throw createError("Invalid Email or password", 403);
 
       const token = user.generateAuthToken();
 
       return res.send(token);
     } catch (error) {
-      return res.status(400).json(error);
+      return res.status(error.code).json(error.message);
     }
   }
 }
