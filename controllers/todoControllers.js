@@ -1,6 +1,6 @@
 //repositories/TodoController
 
-const Todo = require('../models/Todo');
+const Todo = require("../models/Todo");
 class TodoController {
   static async createTodo(req, res) {
     try {
@@ -21,7 +21,7 @@ class TodoController {
       //const user = req.user;
       //const { name } = req.body;
       const todo = await Todo.find({ userId: req.user._id });
-
+      //console.log(todo);
       return res.status(200).json({ todo });
     } catch (error) {
       console.log(error);
@@ -37,13 +37,13 @@ class TodoController {
       if (todo.userId.toString() !== req.user._id)
         return res
           .status(403)
-          .json({ message: 'You are not authorised to change' });
+          .json({ message: "You are not authorised to change" });
 
       await Todo.findByIdAndDelete(id);
 
       return res
         .status(200)
-        .json({ message: 'Successfully Deleted Todo', data: todo });
+        .json({ message: "Successfully Deleted Todo", data: todo });
     } catch (error) {
       console.log(error);
       return res.status(400).json(error);
@@ -58,7 +58,7 @@ class TodoController {
       if (todo.userId.toString() !== req.user._id)
         return res
           .status(403)
-          .json({ message: 'You are not authorised to change' });
+          .json({ message: "You are not authorised to change" });
 
       const newTodo = req.body;
       await Todo.findByIdAndUpdate(id, {
@@ -67,7 +67,7 @@ class TodoController {
       todo = await Todo.findById(id);
       return res
         .status(200)
-        .json({ message: 'Successfully Edited Todo', data: todo });
+        .json({ message: "Successfully Edited Todo", data: todo });
     } catch (error) {
       console.log(error);
       return res.status(400).json(error);
