@@ -1,6 +1,6 @@
 //const express = require('express');
 import express from "express";
-const AuthController = require("../controllers/authControllers");
+import AuthController from "../controllers/authControllers";
 const router = express.Router();
 
 router.post("/", AuthController.authenticateUser);

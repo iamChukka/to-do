@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const config = require("../config/Config");
 const jwt = require("jsonwebtoken");
 function auth(req, res, next) {
@@ -16,4 +17,4 @@ function auth(req, res, next) {
         res.status(400).json({ message: "Invalid Token" });
     }
 }
-module.exports = auth;
+exports.default = auth;

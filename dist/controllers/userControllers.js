@@ -9,22 +9,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+//import { NextFunction } from "express";
+const User_1 = require("../models/User");
 //const config = require('../config/Config');
 const _ = require("lodash");
-const { User, validateUser } = require("../models/User");
 const bcrypt = require("bcrypt");
-const createError = (msg, code = 403) => {
-    const err = new Error(msg);
-    // @ts-ignore
-    err.code = code;
+class customError extends Error {
+    constructor(msg, code) {
+        super(msg);
+        //Object.setPrototypeOf(this, customError.prototype);
+        this.message = msg;
+        this.code = code;
+    }
+}
+const createError = (msg, code) => {
+    const err = new customError(msg, code);
     return err;
 };
+// const createError = (msg: any, code: any = 403) => {
+//   const err = new Error(msg);
+//   err.code = code;
+//   return err;
+// };
 class UserController {
     // create a new user
     static createUser(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { error } = validateUser(req.body);
+                const { error } = (0, User_1.validateUser)(req.body);
                 //console.log(error);
                 if (error)
                     // return (
@@ -34,16 +46,10 @@ class UserController {
                     //     .json(createError("Validation failed", error.details[0].message))
                     // );
                     throw createError("Validation failed", 400);
-                let user = yield User.findOne({ email: req.body.email });
+                let user = yield User_1.User.findOne({ email: req.body.email });
                 if (user)
-                    // return (
-                    //   res
-                    //     .status(400)
-                    //     //.json({ message: 'User Already registered' });
-                    //     .json(createError("User Already registered", 500))
-                    // );
                     throw createError("User Already registered", 403);
-                user = yield User.create(_.pick(req.body, ["name", "email", "password"]));
+                user = yield User_1.User.create(_.pick(req.body, ["name", "email", "password"]));
                 const salt = yield bcrypt.genSalt(10);
                 user.password = yield bcrypt.hash(user.password, salt);
                 yield user.save();
@@ -58,17 +64,18 @@ class UserController {
                 });
             }
             catch (error) {
-                console.log(error + " You are catching this");
+                console.log(error + " You are catching this in userController");
+                //let err = createError("You  are in  User Controller", 400);
                 return res.status(error.code).json(error.message);
             }
         });
     }
     static getUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield User.findById(req.user._id).select("-password");
+            const user = yield User_1.User.findById(req.user._id).select("-password");
             res.send(user);
         });
     }
 }
-module.exports = UserController;
+exports.default = UserController;
 // module.exports = createError;

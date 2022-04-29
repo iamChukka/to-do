@@ -4,22 +4,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const auth = require("../middleware/auth");
+const auth_1 = __importDefault(require("../middleware/auth"));
 // const express = require('express');
 //const app = express.Router();
 const router = express_1.default.Router();
-//set view engine to ejs
-//app.set('view engine', 'ejs');
-const todoControllers = require("../controllers/todoControllers");
-const authenticated = require("../middleware/authenticate");
-const checkAuthenticated = authenticated.checkAuthenticated;
-const checkNotAuthenticated = authenticated.checkNotAuthenticated;
+const todoControllers_1 = __importDefault(require("../controllers/todoControllers"));
 // add a todo item
-router.post("/", auth, todoControllers.createTodo);
+router.post("/", auth_1.default, todoControllers_1.default.createTodo);
 //get all items User added
-router.get("/", auth, todoControllers.getTodosByUserId);
+router.get("/", auth_1.default, todoControllers_1.default.getTodosByUserId);
 // delete a todo item
-router.delete("/:id", auth, todoControllers.deleteTodo);
+router.delete("/:id", auth_1.default, todoControllers_1.default.deleteTodo);
 // update a todo item
-router.put("/:id", auth, todoControllers.updateTodo);
+router.put("/:id", auth_1.default, todoControllers_1.default.updateTodo);
 module.exports = router;

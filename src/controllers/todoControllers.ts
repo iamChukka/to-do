@@ -75,4 +75,4 @@ class TodoController {
   }
 }
 
-export { TodoController };
+export default TodoController;

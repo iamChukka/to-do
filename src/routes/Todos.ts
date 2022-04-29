@@ -1,14 +1,11 @@
 import express from "express";
-const auth = require("../middleware/auth");
+import auth from "../middleware/auth";
 // const express = require('express');
 
 //const app = express.Router();
 const router = express.Router();
 
-//set view engine to ejs
-//app.set('view engine', 'ejs');
-
-const todoControllers = require("../controllers/todoControllers");
+import todoControllers from "../controllers/todoControllers";
 
 // add a todo item
 router.post("/", auth, todoControllers.createTodo);

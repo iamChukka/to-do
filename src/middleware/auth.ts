@@ -18,4 +18,4 @@ function auth(req: any, res: any, next: any) {
   }
 }
 
-module.exports = auth;
+export default auth;

@@ -62,10 +62,10 @@ class UserController {
           message: "User created Successfully",
           data: _.pick(user, ["_id", "name", "email"]),
         });
-    } catch (error) {
-      console.log(error + " You are catching this");
-      let err = createError("you are here with me", 400);
-      return res.status(err.code).json(err.message);
+    } catch (error: any) {
+      console.log(error + " You are catching this in userController");
+      //let err = createError("You  are in  User Controller", 400);
+      return res.status(error.code).json(error.message);
     }
   }
   static async getUser(req: any, res: any) {
@@ -74,5 +74,5 @@ class UserController {
   }
 }
 
-export { UserController };
+export default UserController;
 // module.exports = createError;

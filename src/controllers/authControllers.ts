@@ -1,4 +1,4 @@
-const { User } = require("../models/User");
+import { User } from "../models/User";
 const bcrypt = require("bcrypt");
 const label = "Password";
 const Joi = require("joi");
@@ -55,10 +55,10 @@ class AuthController {
       const token = user.generateAuthToken();
 
       return res.send(token);
-    } catch (error) {
-      console.log(error + " You are catching this");
-      let err = createError("you are here with me", 400);
-      return res.status(err.code).json(err.message);
+    } catch (error: any) {
+      console.log(error + " You are catching this in authController");
+      //let err = createError("You are in Authenticate", 400);
+      return res.status(error.code).json(error.message);
     }
   }
 }
@@ -82,4 +82,4 @@ function validate(req: any) {
   return Schema.validate(req);
 }
 
-module.exports = AuthController;
+export default AuthController;

@@ -1,6 +1,7 @@
 "use strict";
 //models/Todo.js
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Todo = void 0;
 //const mongoose = require("mongoose");
 const mongoose_1 = require("mongoose");
 // Define schema for todo items
@@ -16,4 +17,4 @@ const todoSchema = new mongoose_1.Schema({
     },
 });
 const Todo = (0, mongoose_1.model)("Todo", todoSchema);
-module.exports = Todo;
+exports.Todo = Todo;

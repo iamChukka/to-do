@@ -1,13 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-//models/User.js
+exports.validateUser = exports.User = void 0;
+const mongoose_1 = require("mongoose");
 const config = require("../config/Config");
 const jwt = require("jsonwebtoken");
 const label = "Password";
 const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
-//const mongoose = require('mongoose');
-const mongoose_1 = require("mongoose");
+// interface IUserDocument extends IUser {
+//   getAuthToken: () => {};
+// }
 // Define schema for todo items
 const userSchema = new mongoose_1.Schema({
     name: {
@@ -47,10 +49,11 @@ function validateUser(user) {
     });
     return Schema.validate(user);
 }
+exports.validateUser = validateUser;
 userSchema.methods.generateAuthToken = function () {
     const token = jwt.sign({ _id: this._id }, config.TODO_JWTPRIVATEKEY);
     console.log(token, "We are here");
     return token;
 };
 const User = (0, mongoose_1.model)("User", userSchema);
-module.exports = { User, validateUser };
+exports.User = User;

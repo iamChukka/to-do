@@ -8,16 +8,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const { User } = require("../models/User");
+Object.defineProperty(exports, "__esModule", { value: true });
+const User_1 = require("../models/User");
 const bcrypt = require("bcrypt");
 const label = "Password";
 const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
-const createError = (msg, code = 403) => {
-    const err = new Error(msg);
-    //console.log(message);
-    err.code = code;
-    //console.log(err);
+// const createError = (msg, code = 403) => {
+//   const err = new Error(msg);
+//   //console.log(message);
+//   err.code = code;
+//   //console.log(err);
+//   return err;
+// };
+class customError extends Error {
+    constructor(msg, code) {
+        super(msg);
+        //Object.setPrototypeOf(this, customError.prototype);
+        this.message = msg;
+        this.code = code;
+    }
+}
+const createError = (msg, code) => {
+    const err = new customError(msg, code);
     return err;
 };
 class AuthController {
@@ -31,7 +44,7 @@ class AuthController {
                     //   .status(400)
                     //   .json('Validation failed ' + error.details[0].message);
                     throw createError("Validation failed", 403);
-                let user = yield User.findOne({ email: req.body.email });
+                let user = yield User_1.User.findOne({ email: req.body.email });
                 if (!user)
                     //return res.status(400).send('Invalid Email or password');
                     throw createError("Invalid Email or password", 400);
@@ -43,6 +56,8 @@ class AuthController {
                 return res.send(token);
             }
             catch (error) {
+                console.log(error + " You are catching this in authController");
+                //let err = createError("You are in Authenticate", 400);
                 return res.status(error.code).json(error.message);
             }
         });
@@ -64,4 +79,4 @@ function validate(req) {
     });
     return Schema.validate(req);
 }
-module.exports = AuthController;
+exports.default = AuthController;
