@@ -1,11 +1,17 @@
 //models/Todo.js
 
-const mongoose = require('mongoose');
+//const mongoose = require("mongoose");
 
-const { Schema } = mongoose;
+import { Schema, Types, model } from "mongoose";
+
+interface ITodo {
+  name: string;
+  done: boolean;
+  userId: Types.ObjectId;
+}
 
 // Define schema for todo items
-const todoSchema = new Schema({
+const todoSchema = new Schema<ITodo>({
   name: {
     type: String,
   },
@@ -13,10 +19,10 @@ const todoSchema = new Schema({
     type: Boolean,
   },
   userId: {
-    type: Schema.ObjectId,
+    type: Schema.Types.ObjectId,
   },
 });
 
-const Todo = mongoose.model('Todo', todoSchema);
+const Todo = model<ITodo>("Todo", todoSchema);
 
 module.exports = Todo;

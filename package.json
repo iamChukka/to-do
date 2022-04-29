@@ -9,7 +9,7 @@
   "scripts": {
     "start": "nodemon dist/app.js",
     "build": "tsc -p tsconfig.json",
-    "dev": "ts-node src/index.ts"
+    "dev": "ts-node src/app.ts"
   },
   "repository": {
     "type": "git",

@@ -6,7 +6,7 @@ if (process.env.NODE_ENV !== "production") {
 // const createError = require("http-errors");
 import express, { Request, Response } from "express";
 const path = require("path");
-const mongoose = require("mongoose");
+import { connect } from "mongoose";
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
@@ -18,7 +18,7 @@ const flash = require("express-flash");
 const session = require("express-session");
 const methodOverride = require("method-override");
 // const userRepository = require("./controllers/userControllers");
-const authenticated = require("./middleware/authenticate");
+//const authenticated = require("./middleware/authenticate");
 const config = require("./config/Config");
 const todos = require("./routes/Todos");
 const users = require("./routes/Users");
@@ -26,8 +26,8 @@ const auth = require("./routes/Auth");
 
 const app = express();
 
-const checkAuthenticated = authenticated.checkAuthenticated;
-const checkNotAuthenticated = authenticated.checkNotAuthenticated;
+// const checkAuthenticated = authenticated.checkAuthenticated;
+// const checkNotAuthenticated = authenticated.checkNotAuthenticated;
 
 //require("dotenv").config();
 
@@ -40,10 +40,8 @@ if (!config.TODO_JWTPRIVATEKEY) {
   console.error("FATAL ERROR: jwtPrivateKey is not defined");
   process.exit(1);
 }
-mongoose.connect(config.DB, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+
+connect(config.DB);
 
 app.use(cors()); //enable cors
 

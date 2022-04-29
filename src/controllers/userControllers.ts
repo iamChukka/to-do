@@ -1,19 +1,20 @@
+import { NextFunction } from "express";
+
 //const config = require('../config/Config');
 const _ = require("lodash");
 const { User, validateUser } = require("../models/User");
 const bcrypt = require("bcrypt");
 
-const createError = (msg, code = 403) => {
+const createError = (msg: any, code: any = 403) => {
   const err = new Error(msg);
-  //console.log(message);
+  // @ts-ignore
   err.code = code;
-  //console.log(err);
   return err;
 };
 
 class UserController {
   // create a new user
-  static async createUser(req, res, next) {
+  static async createUser(req: any, res: any, next: any) {
     try {
       const { error } = validateUser(req.body);
       //console.log(error);

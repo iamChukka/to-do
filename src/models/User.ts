@@ -1,16 +1,21 @@
 //models/User.js
-const config = require('../config/Config');
-const jwt = require('jsonwebtoken');
-const label = 'Password';
-const Joi = require('joi');
-const passwordComplexity = require('joi-password-complexity');
+const config = require("../config/Config");
+const jwt = require("jsonwebtoken");
+const label = "Password";
+const Joi = require("joi");
+const passwordComplexity = require("joi-password-complexity");
 
-const mongoose = require('mongoose');
+//const mongoose = require('mongoose');
 
-const { Schema } = mongoose;
+import { Schema, model } from "mongoose";
+interface IUser {
+  name: string;
+  email: string;
+  password: string;
+}
 
 // Define schema for todo items
-const userSchema = new Schema({
+const userSchema = new Schema<IUser>({
   name: {
     type: String,
     required: true,
@@ -32,7 +37,7 @@ const userSchema = new Schema({
   },
 });
 
-function validateUser(user) {
+function validateUser(user: any) {
   const complexityOptions = {
     min: 5,
     max: 1024,
@@ -54,9 +59,9 @@ function validateUser(user) {
 
 userSchema.methods.generateAuthToken = function () {
   const token = jwt.sign({ _id: this._id }, config.TODO_JWTPRIVATEKEY);
-  console.log(token, 'We are here');
+  console.log(token, "We are here");
   return token;
 };
-const User = mongoose.model('User', userSchema);
+const User = model<IUser>("User", userSchema);
 
 module.exports = { User, validateUser };
