@@ -1,7 +1,5 @@
 //models/Todo.js
 
-//const mongoose = require("mongoose");
-
 import { Schema, Types, model } from "mongoose";
 
 interface ITodo {
@@ -25,4 +23,4 @@ const todoSchema: Schema = new Schema<ITodo>({
 
 const Todo = model<ITodo>("Todo", todoSchema);
 
-export { Todo };
+export default Todo;

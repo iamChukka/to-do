@@ -1,9 +1,9 @@
 //import { NextFunction } from "express";
 import { User, validateUser } from "../models/User";
+import bcrypt from "bcrypt";
+import _ from "lodash";
 
 //const config = require('../config/Config');
-const _ = require("lodash");
-const bcrypt = require("bcrypt");
 
 class customError extends Error {
   message: string;

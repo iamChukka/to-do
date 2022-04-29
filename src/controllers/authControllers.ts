@@ -1,8 +1,10 @@
 import { User } from "../models/User";
-const bcrypt = require("bcrypt");
+
+import bcrypt from "bcrypt";
+import Joi from "joi";
+import passwordComplexity from "joi-password-complexity";
+
 const label = "Password";
-const Joi = require("joi");
-const passwordComplexity = require("joi-password-complexity");
 
 // const createError = (msg, code = 403) => {
 //   const err = new Error(msg);

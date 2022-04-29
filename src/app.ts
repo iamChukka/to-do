@@ -5,24 +5,25 @@ if (process.env.NODE_ENV !== "production") {
 }
 // const createError = require("http-errors");
 import express, { Request, Response } from "express";
-const path = require("path");
 import { connect } from "mongoose";
+import config from "./config/Config";
+import todos from "./routes/Todos";
+import users from "./routes/Users";
+import auth from "./routes/Auth";
+
+const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 // const initialisePassport = require("./config/passport-config");
 
 // const bcrypt = require("bcrypt");
-const passport = require("passport");
-const flash = require("express-flash");
-const session = require("express-session");
-const methodOverride = require("method-override");
+// const passport = require("passport");
+// const flash = require("express-flash");
+// const session = require("express-session");
+// const methodOverride = require("method-override");
 // const userRepository = require("./controllers/userControllers");
 //const authenticated = require("./middleware/authenticate");
-const config = require("./config/Config");
-const todos = require("./routes/Todos");
-const users = require("./routes/Users");
-const auth = require("./routes/Auth");
 
 const app = express();
 
@@ -52,18 +53,18 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 //getUsers();
-app.use(flash());
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+// app.use(flash());
+// app.use(
+//   session({
+//     secret: process.env.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: false,
+//   })
+// );
 
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(methodOverride("_method"));
+// app.use(passport.initialize());
+// app.use(passport.session());
+// app.use(methodOverride("_method"));
 app.use("/api/auth", auth);
 app.use("/api/users", users);
 app.use("/api/todos", todos);

@@ -1,13 +1,12 @@
 //models/User.js
-import { Types } from "joi";
 import { Schema, model, Model } from "mongoose";
 
-const config = require("../config/Config");
-const jwt = require("jsonwebtoken");
-const label = "Password";
-const Joi = require("joi");
-const passwordComplexity = require("joi-password-complexity");
+import config from "../config/Config";
+import jwt from "jsonwebtoken";
+import Joi from "joi";
+import passwordComplexity from "joi-password-complexity";
 
+const label = "Password";
 //const mongoose = require('mongoose');
 
 interface IUser {

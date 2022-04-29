@@ -1,5 +1,5 @@
-const config = require("../config/Config");
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
+import config from "../config/Config";
 
 function auth(req: any, res: any, next: any) {
   const token = req.header("x-auth-token");

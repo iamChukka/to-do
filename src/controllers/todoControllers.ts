@@ -1,6 +1,7 @@
 //repositories/TodoController
 
-const Todo = require("../models/Todo");
+import Todo from "../models/Todo";
+
 class TodoController {
   static async createTodo(req: any, res: any) {
     try {
@@ -34,7 +35,7 @@ class TodoController {
       const id = req.params.id;
       const todo = await Todo.findById(id);
 
-      if (todo.userId.toString() !== req.user._id)
+      if (todo?.userId.toString() !== req.user._id)
         return res
           .status(403)
           .json({ message: "You are not authorised to change" });
@@ -55,7 +56,7 @@ class TodoController {
 
       let todo = await Todo.findById(id);
 
-      if (todo.userId.toString() !== req.user._id)
+      if (todo?.userId.toString() !== req.user._id)
         return res
           .status(403)
           .json({ message: "You are not authorised to change" });
