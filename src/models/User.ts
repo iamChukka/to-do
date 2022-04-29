@@ -1,4 +1,7 @@
 //models/User.js
+import { Types } from "joi";
+import { Schema, model, Model } from "mongoose";
+
 const config = require("../config/Config");
 const jwt = require("jsonwebtoken");
 const label = "Password";
@@ -7,15 +10,19 @@ const passwordComplexity = require("joi-password-complexity");
 
 //const mongoose = require('mongoose');
 
-import { Schema, model } from "mongoose";
 interface IUser {
   name: string;
   email: string;
   password: string;
+  generateAuthToken: () => {};
 }
 
+// interface IUserDocument extends IUser {
+//   getAuthToken: () => {};
+// }
+
 // Define schema for todo items
-const userSchema = new Schema<IUser>({
+const userSchema: Schema = new Schema<IUser>({
   name: {
     type: String,
     required: true,
@@ -64,4 +71,4 @@ userSchema.methods.generateAuthToken = function () {
 };
 const User = model<IUser>("User", userSchema);
 
-module.exports = { User, validateUser };
+export { User, validateUser };

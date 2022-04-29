@@ -1,16 +1,31 @@
-import { NextFunction } from "express";
+//import { NextFunction } from "express";
+import { User, validateUser } from "../models/User";
 
 //const config = require('../config/Config');
 const _ = require("lodash");
-const { User, validateUser } = require("../models/User");
 const bcrypt = require("bcrypt");
 
-const createError = (msg: any, code: any = 403) => {
-  const err = new Error(msg);
-  // @ts-ignore
-  err.code = code;
+class customError extends Error {
+  message: string;
+  code: number;
+
+  constructor(msg: string, code: any) {
+    super(msg);
+    //Object.setPrototypeOf(this, customError.prototype);
+    this.message = msg;
+    this.code = code;
+  }
+}
+const createError = (msg: string, code: any) => {
+  const err = new customError(msg, code);
   return err;
 };
+
+// const createError = (msg: any, code: any = 403) => {
+//   const err = new Error(msg);
+//   err.code = code;
+//   return err;
+// };
 
 class UserController {
   // create a new user
@@ -28,14 +43,7 @@ class UserController {
         throw createError("Validation failed", 400);
 
       let user = await User.findOne({ email: req.body.email });
-      if (user)
-        // return (
-        //   res
-        //     .status(400)
-        //     //.json({ message: 'User Already registered' });
-        //     .json(createError("User Already registered", 500))
-        // );
-        throw createError("User Already registered", 403);
+      if (user) throw createError("User Already registered", 403);
 
       user = await User.create(_.pick(req.body, ["name", "email", "password"]));
 
@@ -56,14 +64,15 @@ class UserController {
         });
     } catch (error) {
       console.log(error + " You are catching this");
-      return res.status(error.code).json(error.message);
+      let err = createError("you are here with me", 400);
+      return res.status(err.code).json(err.message);
     }
   }
-  static async getUser(req, res) {
+  static async getUser(req: any, res: any) {
     const user = await User.findById(req.user._id).select("-password");
     res.send(user);
   }
 }
 
-module.exports = UserController;
+export { UserController };
 // module.exports = createError;

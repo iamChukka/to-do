@@ -75,4 +75,4 @@ class TodoController {
   }
 }
 
-module.exports = TodoController;
+export { TodoController };

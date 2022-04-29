@@ -11,7 +11,7 @@ interface ITodo {
 }
 
 // Define schema for todo items
-const todoSchema = new Schema<ITodo>({
+const todoSchema: Schema = new Schema<ITodo>({
   name: {
     type: String,
   },
@@ -25,4 +25,4 @@ const todoSchema = new Schema<ITodo>({
 
 const Todo = model<ITodo>("Todo", todoSchema);
 
-module.exports = Todo;
+export { Todo };

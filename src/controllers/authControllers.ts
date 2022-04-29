@@ -4,17 +4,32 @@ const label = "Password";
 const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
 
-const createError = (msg, code = 403) => {
-  const err = new Error(msg);
-  //console.log(message);
-  err.code = code;
-  //console.log(err);
+// const createError = (msg, code = 403) => {
+//   const err = new Error(msg);
+//   //console.log(message);
+//   err.code = code;
+//   //console.log(err);
+//   return err;
+// };
+class customError extends Error {
+  message: string;
+  code: number;
+
+  constructor(msg: string, code: any) {
+    super(msg);
+    //Object.setPrototypeOf(this, customError.prototype);
+    this.message = msg;
+    this.code = code;
+  }
+}
+const createError = (msg: string, code: any) => {
+  const err = new customError(msg, code);
   return err;
 };
 
 class AuthController {
   // create a new user
-  static async authenticateUser(req, res) {
+  static async authenticateUser(req: any, res: any) {
     try {
       const { error } = validate(req.body);
       if (error)
@@ -41,12 +56,14 @@ class AuthController {
 
       return res.send(token);
     } catch (error) {
-      return res.status(error.code).json(error.message);
+      console.log(error + " You are catching this");
+      let err = createError("you are here with me", 400);
+      return res.status(err.code).json(err.message);
     }
   }
 }
 
-function validate(req) {
+function validate(req: any) {
   const complexityOptions = {
     min: 5,
     max: 1024,
