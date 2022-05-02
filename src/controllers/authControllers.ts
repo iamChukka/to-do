@@ -3,31 +3,9 @@ import { User } from "../models/User";
 import bcrypt from "bcrypt";
 import Joi from "joi";
 import passwordComplexity from "joi-password-complexity";
-
+import createError from "../handlers/errorHandler";
+import createResponse from "../handlers/responseHandler";
 const label = "Password";
-
-// const createError = (msg, code = 403) => {
-//   const err = new Error(msg);
-//   //console.log(message);
-//   err.code = code;
-//   //console.log(err);
-//   return err;
-// };
-class customError extends Error {
-  message: string;
-  code: number;
-
-  constructor(msg: string, code: any) {
-    super(msg);
-    //Object.setPrototypeOf(this, customError.prototype);
-    this.message = msg;
-    this.code = code;
-  }
-}
-const createError = (msg: string, code: any) => {
-  const err = new customError(msg, code);
-  return err;
-};
 
 class AuthController {
   // create a new user
@@ -56,11 +34,22 @@ class AuthController {
 
       const token = user.generateAuthToken();
 
-      return res.send(token);
+      return createResponse({
+        res: res,
+        code: 201,
+        message: "User Successfully Authenticated",
+        token: token,
+      });
     } catch (error: any) {
       console.log(error + " You are catching this in authController");
       //let err = createError("You are in Authenticate", 400);
-      return res.status(error.code).json(error.message);
+      // return res.status(error.code).json(error.message);
+      return createResponse({
+        res: res,
+        code: error.code,
+        message: error.message,
+        data: error,
+      });
     }
   }
 }
