@@ -1,8 +1,9 @@
 //repositories/TodoController
 
-const Todo = require("../models/Todo");
+import Todo from "../models/Todo";
+
 class TodoController {
-  static async createTodo(req, res) {
+  static async createTodo(req: any, res: any) {
     try {
       //const user = req.user;
       const { name } = req.body;
@@ -16,7 +17,7 @@ class TodoController {
     }
   }
 
-  static async getTodosByUserId(req, res) {
+  static async getTodosByUserId(req: any, res: any) {
     try {
       //const user = req.user;
       //const { name } = req.body;
@@ -29,12 +30,12 @@ class TodoController {
     }
   }
 
-  static async deleteTodo(req, res) {
+  static async deleteTodo(req: any, res: any) {
     try {
       const id = req.params.id;
       const todo = await Todo.findById(id);
 
-      if (todo.userId.toString() !== req.user._id)
+      if (todo?.userId.toString() !== req.user._id)
         return res
           .status(403)
           .json({ message: "You are not authorised to change" });
@@ -49,13 +50,13 @@ class TodoController {
       return res.status(400).json(error);
     }
   }
-  static async updateTodo(req, res) {
+  static async updateTodo(req: any, res: any) {
     try {
       const id = req.params.id;
 
       let todo = await Todo.findById(id);
 
-      if (todo.userId.toString() !== req.user._id)
+      if (todo?.userId.toString() !== req.user._id)
         return res
           .status(403)
           .json({ message: "You are not authorised to change" });
@@ -75,4 +76,4 @@ class TodoController {
   }
 }
 
-module.exports = TodoController;
+export default TodoController;
